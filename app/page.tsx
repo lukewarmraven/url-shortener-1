@@ -34,9 +34,14 @@ export default function Home() {
         </CardHeader>
         <CardContent>
           <form
-            onSubmit={handleSubmit((e) => {
-              // e.preventDefault();
-              router.push("/result");
+            onSubmit={handleSubmit(async (data) => {
+              const res = await fetch("/api/shorten_url", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({url: data.url})
+              })
+              const { code } = await res.json()
+              router.push(`/result?code=${code}`);
             })}
             className="space-y-4"
           >
