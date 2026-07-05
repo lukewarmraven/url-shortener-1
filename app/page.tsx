@@ -41,7 +41,7 @@ export default function Home() {
                 body: JSON.stringify({url: data.url})
               })
               const { code } = await res.json()
-              router.push(`/result?code=${code}`);
+              router.push(`/result?c=${code}`);
             })}
             className="space-y-4"
           >

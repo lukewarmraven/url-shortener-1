@@ -7,7 +7,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 export default function Result() {
   const params = useSearchParams()
-  const generatedCode = params.get("code")
+  const generatedCode = params.get("c")
 
   const router = useRouter();
   return (
