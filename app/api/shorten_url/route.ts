@@ -13,7 +13,18 @@ const registerUrl = async (url: string, code: string) => {
 
 export async function POST(req: NextRequest) {
   const { url } = await req.json();
-  const code = shortener(url);
+
+  if (!url || typeof url !== "string") {
+    return NextResponse.json({ error: "URL is required" }, { status: 400 });
+  }
+
+  try {
+    new URL(url);
+  } catch {
+    return NextResponse.json({ error: "Invalid URL" }, { status: 400 });
+  }
+
+  const code = shortener();
 
   await registerUrl(url, code);
 

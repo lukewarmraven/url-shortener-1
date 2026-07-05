@@ -4,7 +4,6 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 type FormValues = {
@@ -12,12 +11,6 @@ type FormValues = {
 }
 
 export default function Home() {
-  useEffect(() => {
-    fetch("/api/test")
-    .then((res) => res.json())
-    .catch((err) => console.error("DB Connection Failed", err))
-  }, [])
-
   const {register, handleSubmit, watch} = useForm<FormValues>()
   const router = useRouter();
   const urlWatcher = watch("url") || "";
@@ -58,6 +51,7 @@ export default function Home() {
                 id="url"
                 placeholder="https://example.com/very-long-url"
                 className="pr-16"
+                type="url"
                 {...register("url")}
                 required
               />

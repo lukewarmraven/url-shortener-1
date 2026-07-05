@@ -17,6 +17,7 @@ export const urlSchema = new mongoose.Schema<IUrl>(
     code: {
       type: String,
       required: true,
+      unique: true,
     },
     clicks: {
       type: Number,

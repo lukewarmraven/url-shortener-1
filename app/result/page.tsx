@@ -1,25 +1,46 @@
-
-
 "use client";
-import { useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Check, Copy } from "lucide-react";
 
-export default function Result() {
+function ResultContent() {
   const params = useSearchParams();
   const generatedCode = params.get("c");
-  const fullUrl = `${window.location.origin}/${generatedCode}`;
+  const router = useRouter();
+  const [origin, setOrigin] = useState("");
   const [copied, setCopied] = useState(false);
 
+  useEffect(() => {
+    setOrigin(window.location.origin);
+  }, []);
+
+  if (!generatedCode) {
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center gap-4">
+        <Card className="w-full max-w-md">
+          <CardHeader className="text-center">
+            <CardTitle>No URL found</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full" onClick={() => router.push("/")}>
+              Shorten a URL
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  const fullUrl = origin ? `${origin}/${generatedCode}` : "";
+
   const handleCopy = async () => {
+    if (!fullUrl) return;
     await navigator.clipboard.writeText(fullUrl);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
-
-  const router = useRouter();
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center gap-4">
@@ -56,5 +77,19 @@ export default function Result() {
         </CardContent>
       </Card>
     </div>
+  );
+}
+
+export default function Result() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen items-center justify-center">
+          <div className="text-muted-foreground text-sm">Loading...</div>
+        </div>
+      }
+    >
+      <ResultContent />
+    </Suspense>
   );
 }
