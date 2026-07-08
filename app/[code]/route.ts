@@ -21,5 +21,5 @@ export async function GET(
     },
   );
 
-  return Response.redirect(doc.originalUrl, 301);
+  return Response.redirect(doc.originalUrl, 302);
 }
